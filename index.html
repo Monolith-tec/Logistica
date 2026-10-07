@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRONOS | Logística Pesada y Servicios Industriales</title>
+
+    <!-- Google Fonts: Cinzel (Títulos elegantes) + Outfit (Lectura ultra limpia) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            950: '#03060D',
+                            900: '#070C16',
+                            800: '#0E172A',
+                            700: '#16243E',
+                            600: '#1E3154'
+                        },
+                        gold: {
+                            300: '#F5E3B3',
+                            400: '#E6C687',
+                            500: '#D4AF37',
+                            600: '#AA8827',
+                            700: '#806318'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Cinzel', 'serif'],
+                        sans: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-black: #03060D;
+            --navy-dark: #070C16;
+            --navy-card: #0E172A;
+            --gold-primary: #D4AF37;
+            --gold-light: #E6C687;
+        }
+
+        /* Ocultar el cursor por defecto en computadoras para usar el cursor personalizado */
+        @media (pointer: fine) {
+            body, button, a, input, select, textarea {
+                cursor: none !important;
+            }
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-black);
+            color: #E2E8F0;
+            overflow-x: hidden;
+            /* Imagen de fondo continua visible de principio a fin con capa traslúcida equilibrada */
+            background-image: 
+                linear-gradient(to bottom, rgba(3, 6, 13, 0.55) 0%, rgba(7, 12, 22, 0.65) 50%, rgba(3, 6, 13, 0.8) 100%),
+                url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2500&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Halo difuminado que sigue al mouse */
+        #cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            margin-top: -250px;
+            margin-left: -250px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, rgba(30, 49, 84, 0.2) 45%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.08s ease-out;
+            will-change: transform;
+            mix-blend-mode: screen;
+        }
+
+        /* Cursor Ícono de Sector Industrial */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            margin-top: -16px;
+            margin-left: -16px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.04s ease-out;
+            will-change: transform;
+        }
+
+        /* Tarjetas con cristal fino (Glassmorphism) para traslucir la imagen de fondo */
+        .gold-glass-card {
+            background: rgba(7, 12, 22, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 1rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gold-glass-card:hover {
+            border-color: rgba(212, 175, 55, 0.65);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+            background: rgba(7, 12, 22, 0.65);
+        }
+
+        .gold-text-glow {
+            text-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Personalización de Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #03060D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #16243E;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500 selection:text-navy-950">
+
+    <!-- Cursor Personalizado Industrial + Halo de Luz Difuminado -->
+    <div id="cursor-glow"></div>
+    <div id="custom-cursor" class="hidden md:flex items-center justify-center text-gold-400">
+        <!-- Ícono de Gancho de Izaje / Puntero de Precisión Industrial -->
+        <svg class="w-8 h-8 drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="3" fill="#D4AF37" fill-opacity="0.8"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6a6 6 0 016 6c0 3.314-2.686 6-6 6M12 6V3M9 3h6"/>
+        </svg>
+    </div>
+
+    <!-- Barra Superior Corporativa -->
+    <div class="bg-navy-950/90 border-b border-gold-500/10 text-xs py-2.5 px-6 backdrop-blur-md relative z-40">
+        <div class="max-w-7xl mx-auto flex justify-between items-center text-slate-300 font-light tracking-wide">
+            <div class="flex items-center gap-6">
+                <span class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <strong class="text-white font-medium">Operaciones 24/7</strong> | SLA 99.8%
+                </span>
+                <span class="hidden md:inline text-gold-500/40">|</span>
+                <span class="hidden md:inline text-slate-300">
+                    Certificaciones: ISO 9001 · ISO 14001 · ISO 45001
+                </span>
+            </div>
+            <div class="flex items-center gap-6 font-mono text-[11px]">
+                <span class="text-gold-400">REPSE: AR-88490-2024</span>
+                <a href="https://wa.me/5215500000000?text=Hola,%20solicito%20atención%20comercial%20KRONOS." 
+                   target="_blank" 
+                   class="text-emerald-400 hover:text-emerald-300 transition-colors font-sans flex items-center gap-1.5 font-medium">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 0c-6.627 0-12 5.373-12 12 0 2.159.572 4.216 1.682 6.018l-1.713 6.253 6.4-1.678c1.728.947 3.688 1.447 5.631 1.447 6.627 0 12-5.373 12-12s-5.373-12-12-12zm6.151 16.927c-.256.719-1.282 1.321-2.115 1.503-.572.124-1.317.225-3.834-.817-3.221-1.333-5.293-4.608-5.454-4.823-.161-.215-1.309-1.742-1.309-3.322 0-1.58.828-2.358 1.123-2.68.295-.322.644-.403.859-.403.215 0 .43.003.617.012.198.01.464-.075.726.553.272.651.928 2.261 1.009 2.425.081.164.134.356.027.572-.107.215-.161.348-.322.537-.161.188-.338.421-.483.565-.161.161-.329.336-.141.658.188.322.836 1.38 1.796 2.235 1.235 1.099 2.278 1.44 2.6 1.574.322.134.51.107.7-.107.188-.215.805-.939 1.02-1.261.215-.322.43-.269.725-.161.295.107 1.879.885 2.201 1.046.322.161.537.242.617.376.08.134.08.778-.176 1.497z"/></svg>
+                    Atención Directa
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación Principal -->
+    <header class="sticky top-0 z-40 bg-navy-950/80 backdrop-blur-xl border-b border-gold-500/20">
+        <div class="max-w-7xl mx-auto px-6 h-22 py-4 flex items-center justify-between">
+            
+            <!-- Logo Corporativo con Tipografía Cinzel -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 rounded-lg flex items-center justify-center text-navy-950 font-display font-black text-2xl shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                    K
+                </div>
+                <div>
+                    <span class="font-display font-bold text-2xl tracking-widest text-white block uppercase leading-none gold-text-glow">KRONOS</span>
+                    <span class="text-[9px] font-sans tracking-[0.25em] text-gold-400 uppercase mt-1 block font-medium">Logística & Servicios Industriales</span>
+                </div>
+            </a>
+
+            <!-- Menú de Navegación -->
+            <nav class="hidden lg:flex items-center gap-10 text-xs font-semibold uppercase tracking-widest text-slate-300">
+                <a href="#servicios" class="hover:text-gold-400 transition-colors">Servicios</a>
+                <a href="#flotilla" class="hover:text-gold-400 transition-colors">Flotilla & Equipos</a>
+                <a href="#certificaciones" class="hover:text-gold-400 transition-colors">ISO & Calidad</a>
+                <a href="#rfq" class="text-gold-400 hover:text-gold-300 font-bold flex items-center gap-2">
+                    <span>Cotización RFQ</span>
+                    <span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span>
+                </a>
+            </nav>
+
+            <!-- Botones de Acción -->
+            <div class="flex items-center gap-4">
+                <a href="#rfq" class="px-6 py-3 rounded-lg bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                    Solicitar Cotización
+                </a>
+
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-300 hover:text-white" aria-label="Abrir Menú">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-navy-900 border-b border-gold-500/20 px-6 py-6 space-y-4 text-xs font-semibold uppercase tracking-wider">
+            <a href="#servicios" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-gold-400">Servicios Especializados</a>
+            <a href="#flotilla" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-gold-400">Flotilla & Equipos</a>
+            <a href="#certificaciones" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-gold-400">Certificaciones ISO</a>
+            <a href="#rfq" onclick="toggleMobileMenu()" class="block text-gold-400 font-bold">Solicitar Cotización (RFQ)</a>
+        </div>
+    </header>
+
+    <!-- Hero Principal Centrado y Despejado -->
+    <section class="relative pt-20 pb-28 md:pt-28 md:pb-36">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <div class="space-y-8 flex flex-col items-center">
+                
+                <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-gold-500/40 bg-navy-950/60 backdrop-blur-md text-gold-400 text-xs tracking-wider shadow-lg">
+                    <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                    <span class="font-medium">Infraestructura & Logística Industrial B2B</span>
+                </div>
+
+                <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.15] tracking-wide max-w-4xl">
+                    Ingeniería en Movimiento y <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600 gold-text-glow">Cero Paros Inesperados</span>
+                </h1>
+
+                <!-- Texto de lectura cómoda y aireada -->
+                <p class="text-slate-200 text-base sm:text-xl font-light leading-relaxed max-w-3xl drop-shadow-md">
+                    Especialistas en transporte de carga sobredimensionada, maniobras críticas de izaje y mantenimiento electromecánico de plantas industriales en Norteamérica.
+                </p>
+
+                <!-- CTAs Destacados -->
+                <div class="pt-4 flex flex-wrap items-center justify-center gap-5">
+                    <a href="#rfq" class="px-9 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-xs uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] flex items-center gap-3">
+                        <span>Iniciar Cotización RFQ</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+
+                    <a href="#servicios" class="px-8 py-4 rounded-xl border border-gold-500/40 bg-navy-950/50 backdrop-blur-md hover:bg-navy-900/80 text-slate-200 font-semibold text-xs uppercase tracking-widest transition-all flex items-center gap-2">
+                        <span>Explorar Servicios</span>
+                    </a>
+                </div>
+
+                <!-- Métrica Resumida Centrada -->
+                <div class="pt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 border-t border-gold-500/20 w-full max-w-3xl mt-6">
+                    <div class="bg-navy-950/40 backdrop-blur-sm p-4 rounded-xl border border-gold-500/15">
+                        <span class="block font-display text-3xl sm:text-4xl font-bold text-gold-400 gold-text-glow">+150K Ton</span>
+                        <span class="text-xs text-slate-300 font-light mt-1 block">Capacidad Anual</span>
+                    </div>
+                    <div class="bg-navy-950/40 backdrop-blur-sm p-4 rounded-xl border border-gold-500/15">
+                        <span class="block font-display text-3xl sm:text-4xl font-bold text-gold-400 gold-text-glow">99.8%</span>
+                        <span class="text-xs text-slate-300 font-light mt-1 block">SLA Cumplimiento</span>
+                    </div>
+                    <div class="bg-navy-950/40 backdrop-blur-sm p-4 rounded-xl border border-gold-500/15">
+                        <span class="block font-display text-3xl sm:text-4xl font-bold text-gold-400 gold-text-glow">ISO 9001</span>
+                        <span class="text-xs text-slate-300 font-light mt-1 block">Normativa Global</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo de Servicios (Rediseñado para máxima legibilidad) -->
+    <section id="servicios" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-sans uppercase text-gold-400 tracking-[0.25em] font-semibold block">Nuestra Especialización</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">Servicios Industriales B2B</h2>
+                <div class="w-12 h-0.5 bg-gold-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Servicio 1 -->
+                <div class="gold-glass-card p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Carga Sobredimensionada</h3>
+                        <p class="text-xs text-slate-300 font-light leading-relaxed">
+                            Traslado seguro de maquinaria pesada y reactores con escoltas autorizadas y gestión de permisos SCT.
+                        </p>
+                    </div>
+                    <button onclick="openTechSheet('transporte')" class="w-full py-3 bg-navy-800 hover:bg-gold-500 hover:text-navy-950 text-slate-200 text-xs font-semibold rounded-lg transition-all border border-gold-500/20">
+                        Ficha Técnica PDF
+                    </button>
+                </div>
+
+                <!-- Servicio 2 -->
+                <div class="gold-glass-card p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Paros de Planta</h3>
+                        <p class="text-xs text-slate-300 font-light leading-relaxed">
+                            Mantenimiento electromecánico integral, alineación láser sub-milimétrica y termografía preventiva.
+                        </p>
+                    </div>
+                    <button onclick="openTechSheet('mantenimiento')" class="w-full py-3 bg-navy-800 hover:bg-gold-500 hover:text-navy-950 text-slate-200 text-xs font-semibold rounded-lg transition-all border border-gold-500/20">
+                        Ficha Técnica PDF
+                    </button>
+                </div>
+
+                <!-- Servicio 3 -->
+                <div class="gold-glass-card p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Izaje Crítico & Rigging</h3>
+                        <p class="text-xs text-slate-300 font-light leading-relaxed">
+                            Montajes industriales complejos con grúas de hasta 500 toneladas y plan de rigging 3D previo.
+                        </p>
+                    </div>
+                    <button onclick="openTechSheet('izaje')" class="w-full py-3 bg-navy-800 hover:bg-gold-500 hover:text-navy-950 text-slate-200 text-xs font-semibold rounded-lg transition-all border border-gold-500/20">
+                        Ficha Técnica PDF
+                    </button>
+                </div>
+
+                <!-- Servicio 4 -->
+                <div class="gold-glass-card p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Almacén & Depósito Fiscal</h3>
+                        <p class="text-xs text-slate-300 font-light leading-relaxed">
+                            +45,000 m² de resguardo techado, patio de maniobras y control de inventario en tiempo real SAP WMS.
+                        </p>
+                    </div>
+                    <button onclick="openTechSheet('almacenamiento')" class="w-full py-3 bg-navy-800 hover:bg-gold-500 hover:text-navy-950 text-slate-200 text-xs font-semibold rounded-lg transition-all border border-gold-500/20">
+                        Ficha Técnica PDF
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sección de Flotilla y Capacidad Instalada -->
+    <section id="flotilla" class="py-24 relative border-t border-gold-500/15">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
+                <span class="text-xs uppercase text-gold-400 tracking-[0.25em] font-semibold block">Infraestructura Propia</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">Flotilla & Equipos de Alta Capacidad</h2>
+            </div>
+
+            <!-- Filtros Simplificados -->
+            <div class="flex justify-center mb-12">
+                <div class="inline-flex bg-navy-900/90 p-1.5 rounded-xl border border-gold-500/20 text-xs font-medium">
+                    <button onclick="filterCapacity('todos')" class="cap-btn px-6 py-2.5 rounded-lg bg-gold-500 text-navy-950 font-bold transition-all" data-cat="todos">
+                        Ver Todos
+                    </button>
+                    <button onclick="filterCapacity('transporte')" class="cap-btn px-6 py-2.5 rounded-lg text-slate-300 hover:text-white transition-all" data-cat="transporte">
+                        Remolques
+                    </button>
+                    <button onclick="filterCapacity('gruas')" class="cap-btn px-6 py-2.5 rounded-lg text-slate-300 hover:text-white transition-all" data-cat="gruas">
+                        Grúas
+                    </button>
+                    <button onclick="filterCapacity('diagnostico')" class="cap-btn px-6 py-2.5 rounded-lg text-slate-300 hover:text-white transition-all" data-cat="diagnostico">
+                        Alineación Láser
+                    </button>
+                </div>
+            </div>
+
+            <!-- Muestra de Equipos -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Equipo 1 -->
+                <div class="machine-card gold-glass-card overflow-hidden" data-cat="transporte">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=800&auto=format&fit=crop" 
+                             alt="Modular Goldhofer" 
+                             class="w-full h-full object-cover brightness-90 hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/800x600/070C16/E6C687?text=Modular+Goldhofer'">
+                        <span class="absolute top-4 left-4 bg-navy-950/90 text-gold-400 font-mono text-[10px] px-3 py-1 rounded-full border border-gold-500/30">
+                            Goldhofer THP/SL
+                        </span>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-display font-bold text-white text-base">Remolque Modular Hidráulico</h3>
+                        <p class="text-xs text-slate-300 font-light">Capacidad hasta 150 Toneladas con dirección electrónica integrada.</p>
+                    </div>
+                </div>
+
+                <!-- Equipo 2 -->
+                <div class="machine-card gold-glass-card overflow-hidden" data-cat="gruas">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=800&auto=format&fit=crop" 
+                             alt="Grúa Liebherr" 
+                             class="w-full h-full object-cover brightness-90 hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/800x600/070C16/E6C687?text=Gr%C3%BAa+Liebherr+500T'">
+                        <span class="absolute top-4 left-4 bg-navy-950/90 text-gold-400 font-mono text-[10px] px-3 py-1 rounded-full border border-gold-500/30">
+                            Liebherr 500T
+                        </span>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-display font-bold text-white text-base">Grúa Telescópica LTM 1500</h3>
+                        <p class="text-xs text-slate-300 font-light">Izaje seguro hasta 500 toneladas con pluma extensible de 84 metros.</p>
+                    </div>
+                </div>
+
+                <!-- Equipo 3 -->
+                <div class="machine-card gold-glass-card overflow-hidden" data-cat="diagnostico">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop" 
+                             alt="Alineador Láser" 
+                             class="w-full h-full object-cover brightness-90 hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/800x600/070C16/E6C687?text=Alineador+L%C3%A1ser'">
+                        <span class="absolute top-4 left-4 bg-navy-950/90 text-gold-400 font-mono text-[10px] px-3 py-1 rounded-full border border-gold-500/30">
+                            Prüftechnik ROTALIGN
+                        </span>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-display font-bold text-white text-base">Alineador Láser Sub-Milimétrico</h3>
+                        <p class="text-xs text-slate-300 font-light">Centrado de ejes para turbinas y motores con precisión de 0.001 mm.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Certificaciones e ISO -->
+    <section id="certificaciones" class="py-24 relative border-t border-gold-500/15">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span class="text-xs uppercase text-gold-400 tracking-[0.25em] font-semibold block">Respaldo Institucional</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">Certificaciones & Compliance</h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="gold-glass-card p-8 text-center space-y-4">
+                    <div class="w-12 h-12 bg-gold-500/10 border border-gold-500/40 text-gold-400 rounded-full mx-auto flex items-center justify-center font-display font-bold">
+                        ISO
+                    </div>
+                    <h3 class="font-display font-bold text-white text-base">ISO 9001:2015</h3>
+                    <p class="text-xs text-slate-300 font-light">Gestión de Calidad Certificada en Procesos Logísticos.</p>
+                    <button onclick="openCertModal('ISO 9001:2015', 'Certificación de Calidad en Procesos de Logística e Ingeniería Industrial', 'MX-9001-8849')" class="text-xs text-gold-400 hover:text-gold-300 font-medium underline">
+                        Validar Folio
+                    </button>
+                </div>
+
+                <div class="gold-glass-card p-8 text-center space-y-4">
+                    <div class="w-12 h-12 bg-gold-500/10 border border-gold-500/40 text-gold-400 rounded-full mx-auto flex items-center justify-center font-display font-bold">
+                        ISO
+                    </div>
+                    <h3 class="font-display font-bold text-white text-base">ISO 14001:2015</h3>
+                    <p class="text-xs text-slate-300 font-light">Compromiso Ambiental y Bajas Emisiones Operativas.</p>
+                    <button onclick="openCertModal('ISO 14001:2015', 'Norma Internacional Ambiental para Traslados Industriales', 'MX-14001-9012')" class="text-xs text-gold-400 hover:text-gold-300 font-medium underline">
+                        Validar Folio
+                    </button>
+                </div>
+
+                <div class="gold-glass-card p-8 text-center space-y-4">
+                    <div class="w-12 h-12 bg-gold-500/10 border border-gold-500/40 text-gold-400 rounded-full mx-auto flex items-center justify-center font-display font-bold">
+                        ISO
+                    </div>
+                    <h3 class="font-display font-bold text-white text-base">ISO 45001:2018</h3>
+                    <p class="text-xs text-slate-300 font-light">Seguridad y Salud Ocupacional en Izaje Crítico.</p>
+                    <button onclick="openCertModal('ISO 45001:2018', 'Seguridad Ocupacional en Izajes de Alto Riesgo', 'MX-45001-3321')" class="text-xs text-gold-400 hover:text-gold-300 font-medium underline">
+                        Validar Folio
+                    </button>
+                </div>
+
+                <div class="gold-glass-card p-8 text-center space-y-4">
+                    <div class="w-12 h-12 bg-gold-500/10 border border-gold-500/40 text-gold-400 rounded-full mx-auto flex items-center justify-center font-display font-bold">
+                        STPS
+                    </div>
+                    <h3 class="font-display font-bold text-white text-base">Registro REPSE</h3>
+                    <p class="text-xs text-slate-300 font-light">Padrón de Proveedores de Servicios Especializados Vigente.</p>
+                    <button onclick="openCertModal('Padrón REPSE', 'Registro Oficial Ante la Secretaría del Trabajo STPS', 'AR-88490-2024')" class="text-xs text-gold-400 hover:text-gold-300 font-medium underline">
+                        Validar Folio
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Portal de Cotización RFQ -->
+    <section id="rfq" class="py-24 relative border-t border-gold-500/15">
+        <div class="max-w-4xl mx-auto px-6">
+            
+            <div class="text-center space-y-3 mb-14">
+                <span class="text-xs uppercase text-gold-400 tracking-[0.25em] font-semibold block">Formulario de Ingeniería</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">Solicitante de Cotización (RFQ)</h2>
+            </div>
+
+            <!-- Formulario Elegante y Espacioso -->
+            <div class="gold-glass-card p-8 sm:p-12">
+                <form id="rfq-form" onsubmit="handleRFQSubmit(event)" class="space-y-8">
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Nombre del Solicitante *</label>
+                            <input type="text" required placeholder="Ej. Ing. Roberto Garza" 
+                                   class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Empresa / Razón Social *</label>
+                            <input type="text" required placeholder="Ej. Caterpillar México" 
+                                   class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Correo Electrónico *</label>
+                            <input type="email" required placeholder="contacto@empresa.com" 
+                                   class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Teléfono Directo *</label>
+                            <input type="tel" required placeholder="+52 81 0000 0000" 
+                                   class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Servicio Requerido *</label>
+                        <select id="rfq-service-type" required class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors">
+                            <option value="">Seleccione una especialidad...</option>
+                            <option value="Transporte Sobredimensionado">Transporte Sobredimensionado y Carga Pesada</option>
+                            <option value="Paro de Planta">Mantenimiento y Paros Técnicos de Planta</option>
+                            <option value="Izaje Crítico">Maniobras de Izaje y Montaje Industrial</option>
+                            <option value="Almacenaje Industrial">Almacén y Depósito Fiscal WMS</option>
+                        </select>
+                    </div>
+
+                    <!-- Archivo Adjunto Técnico -->
+                    <div class="space-y-2">
+                        <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Planos o Fichas Técnicas (Opcional)</label>
+                        <div onclick="document.getElementById('file-input').click()" class="border-2 border-dashed border-gold-500/30 hover:border-gold-400 bg-navy-950/50 rounded-xl p-8 text-center cursor-pointer transition-colors">
+                            <input type="file" id="file-input" onchange="handleFileSelected(event)" class="hidden">
+                            <p class="text-xs text-slate-300" id="file-label-text">Haz clic aquí para adjuntar archivo PDF, DWG o ZIP</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs uppercase text-slate-300 tracking-wider font-medium">Detalles del Requerimiento</label>
+                        <textarea id="rfq-details" rows="3" placeholder="Dimensiones, peso, ruta u observaciones técnicas..." 
+                                  class="w-full bg-navy-950/80 border border-gold-500/20 rounded-lg p-4 text-xs text-white focus:outline-none focus:border-gold-400 transition-colors"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                        Enviar Solicitud a Ingeniería
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Pie de Página Elegante -->
+    <footer class="bg-navy-950 border-t border-gold-500/15 py-12 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gold-500 rounded flex items-center justify-center font-display font-bold text-navy-950">K</div>
+                <span class="font-display font-bold text-white text-lg tracking-wider">KRONOS</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-light">© 2026 KRONOS Industrial Logistics S.A. de C.V. Todos los derechos reservados.</p>
+            <button onclick="openPrivacyModal()" class="hover:text-gold-400 transition-colors text-slate-300">Aviso de Privacidad B2B</button>
+        </div>
+    </footer>
+
+    <!-- Backdrop de Modales -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-navy-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        
+        <!-- Modal Ficha Técnica -->
+        <div id="tech-sheet-modal" class="gold-glass-card max-w-lg w-full p-8 space-y-6 hidden relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+            <h3 id="tech-title" class="font-display text-xl font-bold text-white">Ficha Técnica</h3>
+            <p id="tech-desc" class="text-xs text-slate-300 font-light leading-relaxed"></p>
+            <div class="pt-4 border-t border-gold-500/20 flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2.5 bg-gold-500 text-navy-950 font-bold text-xs uppercase rounded-lg">Cerrar</button>
+            </div>
+        </div>
+
+        <!-- Modal Privacidad -->
+        <div id="privacy-modal" class="gold-glass-card max-w-lg w-full p-8 space-y-6 hidden relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+            <h3 class="font-display text-xl font-bold text-white">Aviso de Privacidad</h3>
+            <p class="text-xs text-slate-300 font-light leading-relaxed">Sus datos corporativos y archivos adjuntos están resguardados bajo políticas de estricta confidencialidad B2B y acuerdo NDA.</p>
+            <div class="pt-4 border-t border-gold-500/20 flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2.5 bg-gold-500 text-navy-950 font-bold text-xs uppercase rounded-lg">Aceptar</button>
+            </div>
+        </div>
+
+        <!-- Modal Certificado -->
+        <div id="cert-modal" class="gold-glass-card max-w-md w-full p-8 space-y-4 text-center hidden relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+            <h3 id="cert-modal-title" class="font-display text-lg font-bold text-white">Validación ISO</h3>
+            <p id="cert-modal-desc" class="text-xs text-slate-300 font-light"></p>
+            <div id="cert-modal-code" class="p-3 bg-navy-950 rounded font-mono text-xs text-gold-400 border border-gold-500/30"></div>
+            <button onclick="closeModal()" class="w-full py-3 bg-gold-500 text-navy-950 font-bold text-xs uppercase rounded-lg">Entendido</button>
+        </div>
+
+    </div>
+
+    <!-- Script de Lógica e Interacción del Mouse -->
+    <script>
+        // Lógica del Cursor Personalizado y Halo Glow
+        const cursorGlow = document.getElementById('cursor-glow');
+        const customCursor = document.getElementById('custom-cursor');
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let glowX = mouseX;
+        let glowY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Movimiento inmediato para el puntero de precisión
+            if (customCursor) {
+                customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+            }
+        });
+
+        // Animación suave (Interpolación) para el halo difuminado
+        function animateGlow() {
+            glowX += (mouseX - glowX) * 0.12;
+            glowY += (mouseY - glowY) * 0.12;
+
+            if (cursorGlow) {
+                cursorGlow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0)`;
+            }
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+
+        // Fichas Técnicas
+        const techSheets = {
+            transporte: {
+                title: "Transporte Sobredimensionado",
+                desc: "Equipos hidráulicos modulares para piezas de gran tonelaje con escoltas SCT y simulación previa de ruta."
+            },
+            mantenimiento: {
+                title: "Paros Técnicos y Mantenimiento",
+                desc: "Alineación láser de precisión, termografía preventiva y brigadas de emergencia 24/7 con personal certificado STPS."
+            },
+            izaje: {
+                title: "Izaje Crítico con Grúas Telescópicas",
+                desc: "Capacidad de elevación hasta 500T, rigging en 3D y riggers certificados NCCCO."
+            },
+            almacenamiento: {
+                title: "Almacenaje Industrial & Depósito Fiscal",
+                desc: "+45,000 m² de nave industrial con piso de alta resistencia y control SAP WMS."
+            }
+        };
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function filterCapacity(cat) {
+            document.querySelectorAll('.cap-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cap-btn px-6 py-2.5 rounded-lg bg-gold-500 text-navy-950 font-bold transition-all";
+                } else {
+                    btn.className = "cap-btn px-6 py-2.5 rounded-lg text-slate-300 hover:text-white transition-all";
+                }
+            });
+
+            document.querySelectorAll('.machine-card').forEach(card => {
+                if (cat === 'todos' || card.dataset.cat === cat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.add('hidden');
+            document.getElementById('tech-sheet-modal').classList.add('hidden');
+            document.getElementById('privacy-modal').classList.add('hidden');
+            document.getElementById('cert-modal').classList.add('hidden');
+        }
+
+        function openTechSheet(key) {
+            const data = techSheets[key];
+            if (!data) return;
+            document.getElementById('tech-title').innerText = data.title;
+            document.getElementById('tech-desc').innerText = data.desc;
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+            document.getElementById('tech-sheet-modal').classList.remove('hidden');
+        }
+
+        function openPrivacyModal() {
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+            document.getElementById('privacy-modal').classList.remove('hidden');
+        }
+
+        function openCertModal(title, desc, code) {
+            document.getElementById('cert-modal-title').innerText = title;
+            document.getElementById('cert-modal-desc').innerText = desc;
+            document.getElementById('cert-modal-code').innerText = "Folio Oficial: " + code;
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+            document.getElementById('cert-modal').classList.remove('hidden');
+        }
+
+        function handleFileSelected(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('file-label-text').innerText = "✓ Archivo adjunto: " + file.name;
+            }
+        }
+
+        function handleRFQSubmit(e) {
+            e.preventDefault();
+            const folio = 'RFQ-' + Math.floor(100000 + Math.random() * 900000);
+            alert(`Solicitud recibida con éxito. Su folio de seguimiento es: ${folio}`);
+            document.getElementById('rfq-form').reset();
+        }
+    </script>
+</body>
+</html>
